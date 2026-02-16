@@ -1,0 +1,13 @@
+node_modules/
+pnpm-lock.yaml
+dist/
+.vscode/
+.idea/
+.DS_Store
+*.log
+apps/**/vite.config.js
+apps/**/vite.config.d.ts
+
+# Java / Spring
+services/app-registry/target/
+services/app-registry/.mvn/

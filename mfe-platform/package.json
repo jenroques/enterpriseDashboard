@@ -1,0 +1,27 @@
+{
+  "name": "mfe-platform",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "predev": "powershell -NoProfile -ExecutionPolicy Bypass -File ./infra/scripts/free-dev-ports.ps1",
+    "dev": "concurrently -n registry,shell,accounts,billing,analytics -c blue,green,cyan,magenta,yellow \"npm run dev:registry\" \"npm run dev -w @mfe/shell-host\" \"npm run dev -w @mfe/remote-accounts\" \"npm run dev -w @mfe/remote-billing\" \"npm run dev -w @mfe/remote-analytics\"",
+    "dev:frontend": "concurrently -n shell,accounts,billing,analytics -c green,cyan,magenta,yellow \"npm run dev -w @mfe/shell-host\" \"npm run dev -w @mfe/remote-accounts\" \"npm run dev -w @mfe/remote-billing\" \"npm run dev -w @mfe/remote-analytics\"",
+    "dev:registry": "node ./infra/scripts/start-registry.mjs",
+    "dev:registry:real": "set MFE_REGISTRY_MODE=real && node ./infra/scripts/start-registry.mjs",
+    "dev:registry:mock": "node ./infra/scripts/mock-registry-server.mjs",
+    "dev:host": "npm run dev -w @mfe/shell-host",
+    "dev:remotes": "concurrently -n accounts,billing,analytics -c cyan,magenta,yellow \"npm run dev -w @mfe/remote-accounts\" \"npm run dev -w @mfe/remote-billing\" \"npm run dev -w @mfe/remote-analytics\"",
+    "test": "npm run test:unit -w @mfe/shell-host",
+    "test:contract": "npm run test:contract -w @mfe/shell-host",
+    "test:e2e": "npm run test:e2e -w @mfe/shell-host",
+    "build": "npm run build --workspaces --if-present",
+    "preview": "npm run preview -w @mfe/shell-host"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
