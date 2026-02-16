@@ -1,0 +1,23 @@
+{
+  "name": "mfe-remote-billing",
+  "description": "Billing remote for mfe-platform",
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "APP_BASE": {
+      "value": "apps/remote-billing"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

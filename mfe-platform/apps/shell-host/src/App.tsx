@@ -174,20 +174,30 @@ function ShellContent({
   const firstAuthorizedPath = routes.find((route) => hasRequiredRole(authState.roles, route.requiredRoles))?.path ?? '/debug/remotes';
 
   const drawer = (
-    <Box>
-      <Toolbar>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', px: 2 }}>
         <Typography variant="h6" noWrap>
           mfe-platform
         </Typography>
-        <Typography variant="caption" sx={{ ml: 'auto' }}>
+        <Typography variant="caption" sx={{ ml: 'auto', color: 'text.secondary' }}>
           {authState.username} ({authState.roles.join(', ')})
         </Typography>
       </Toolbar>
-      <List>
+      <List sx={{ px: 1, py: 1, flexGrow: 1 }}>
         {navItems.map((item) => (
           <ListItemButton
             key={item.key}
             selected={location.pathname === item.path}
+            sx={{
+              borderRadius: 1,
+              mb: 0.5,
+              '&.Mui-selected': {
+                bgcolor: 'action.selected',
+                borderLeft: 3,
+                borderColor: 'primary.main',
+                pl: 1.5
+              }
+            }}
             onClick={() => {
               navigate(item.path);
               setMobileOpen(false);
@@ -197,7 +207,7 @@ function ShellContent({
           </ListItemButton>
         ))}
       </List>
-      <Box sx={{ px: 2, pb: 2 }}>
+      <Box sx={{ px: 2, pb: 2, pt: 1, borderTop: 1, borderColor: 'divider' }}>
         <Button onClick={onLogout} variant="outlined" fullWidth>
           Logout
         </Button>
@@ -211,13 +221,21 @@ function ShellContent({
         <CssBaseline />
         <AppBar
           position="fixed"
-          sx={{ width: { sm: `calc(100% - ${drawerWidth}px)` }, ml: { sm: `${drawerWidth}px` } }}
+          color="inherit"
+          elevation={0}
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            bgcolor: 'background.paper',
+            borderBottom: 1,
+            borderColor: 'divider'
+          }}
         >
-          <Toolbar>
-            <IconButton color="inherit" edge="start" onClick={() => setMobileOpen(!mobileOpen)} sx={{ mr: 2, display: { sm: 'none' } }}>
+          <Toolbar sx={{ minHeight: 68 }}>
+            <IconButton color="inherit" edge="start" onClick={() => setMobileOpen(!mobileOpen)} sx={{ mr: 2, display: { sm: 'none' }, color: 'text.primary' }}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div" sx={{ color: 'text.primary' }}>
               Shell Host
             </Typography>
           </Toolbar>
@@ -230,7 +248,7 @@ function ShellContent({
             ModalProps={{ keepMounted: true }}
             sx={{
               display: { xs: 'block', sm: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: 1, borderColor: 'divider' }
             }}
           >
             {drawer}
@@ -239,66 +257,68 @@ function ShellContent({
             variant="permanent"
             sx={{
               display: { xs: 'none', sm: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: 1, borderColor: 'divider' }
             }}
             open
           >
             {drawer}
           </Drawer>
         </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+        <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, sm: 3 }, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           {hasDegradedRemote ? (
-            <Alert severity="warning" sx={{ mb: 2 }}>
+            <Alert severity="warning" sx={{ mb: 2, border: 1, borderColor: 'divider' }}>
               Degraded mode active: one or more remotes failed and fallback pages are being shown.
             </Alert>
           ) : null}
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mb: 2, px: { xs: 0.5, sm: 1 } }}>
             <PageHeader title="Shell Host" subtitle="Runtime composition of role-aware microfrontends." />
           </Box>
-          <Routes>
-            {routes.map((route) => (
+          <Box sx={{ bgcolor: 'background.paper', border: 1, borderColor: 'divider', borderRadius: 2, p: { xs: 1.5, sm: 2 } }}>
+            <Routes>
+              {routes.map((route) => (
+                <Route
+                  key={route.id}
+                  path={route.path}
+                  element={
+                    <RoleGate
+                      userRoles={authState.roles}
+                      requiredRoles={route.requiredRoles}
+                      fallback={<AccessDenied requiredRoles={route.requiredRoles} />}
+                    >
+                      <RemoteLoader route={route} userId={authState.username ?? 'anonymous'} accessToken={authState.accessToken} />
+                    </RoleGate>
+                  }
+                />
+              ))}
+              <Route path="/debug/remotes" element={<RemoteStatusPage />} />
               <Route
-                key={route.id}
-                path={route.path}
+                path="/admin/canary-control"
                 element={
                   <RoleGate
                     userRoles={authState.roles}
-                    requiredRoles={route.requiredRoles}
-                    fallback={<AccessDenied requiredRoles={route.requiredRoles} />}
+                    requiredRoles={['ADMIN']}
+                    fallback={<AccessDenied requiredRoles={['ADMIN']} />}
                   >
-                    <RemoteLoader route={route} userId={authState.username ?? 'anonymous'} accessToken={authState.accessToken} />
+                    <CanaryControlPage accessToken={authState.accessToken ?? ''} onFlagsSaved={onCanaryFlagsSaved} />
                   </RoleGate>
                 }
               />
-            ))}
-            <Route path="/debug/remotes" element={<RemoteStatusPage />} />
-            <Route
-              path="/admin/canary-control"
-              element={
-                <RoleGate
-                  userRoles={authState.roles}
-                  requiredRoles={['ADMIN']}
-                  fallback={<AccessDenied requiredRoles={['ADMIN']} />}
-                >
-                  <CanaryControlPage accessToken={authState.accessToken ?? ''} onFlagsSaved={onCanaryFlagsSaved} />
-                </RoleGate>
-              }
-            />
-            <Route
-              path="/admin/telemetry"
-              element={
-                <RoleGate
-                  userRoles={authState.roles}
-                  requiredRoles={['ADMIN']}
-                  fallback={<AccessDenied requiredRoles={['ADMIN']} />}
-                >
-                  <TelemetryDashboardPage accessToken={authState.accessToken ?? ''} />
-                </RoleGate>
-              }
-            />
-            <Route path="*" element={<Navigate to={firstAuthorizedPath} replace />} />
-          </Routes>
+              <Route
+                path="/admin/telemetry"
+                element={
+                  <RoleGate
+                    userRoles={authState.roles}
+                    requiredRoles={['ADMIN']}
+                    fallback={<AccessDenied requiredRoles={['ADMIN']} />}
+                  >
+                    <TelemetryDashboardPage accessToken={authState.accessToken ?? ''} />
+                  </RoleGate>
+                }
+              />
+              <Route path="*" element={<Navigate to={firstAuthorizedPath} replace />} />
+            </Routes>
+          </Box>
         </Box>
       </Box>
       <Snackbar

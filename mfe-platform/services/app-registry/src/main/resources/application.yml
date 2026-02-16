@@ -1,19 +1,21 @@
 server:
-  port: 8081
+  port: ${PORT:8081}
 
 spring:
   application:
     name: app-registry
 
 app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
   jwt:
-    secret: "local-dev-super-secret-signing-key-please-change"
+    secret: ${APP_JWT_SECRET:local-dev-super-secret-signing-key-please-change}
     expiration-minutes: 60
   registry:
     remotes:
-      accounts-stable-url: "http://localhost:5174/assets/remoteEntry.js"
-      accounts-canary-url: "http://localhost:5174/assets/remoteEntry.js"
-      billing-stable-url: "http://localhost:5175/assets/remoteEntry.js"
-      billing-canary-url: "http://localhost:5175/assets/remoteEntry.js"
-      analytics-stable-url: "http://localhost:5176/assets/remoteEntry.js"
-      analytics-canary-url: "http://localhost:5176/assets/remoteEntry.js"
+      accounts-stable-url: ${ACCOUNTS_STABLE_URL:http://localhost:5174/assets/remoteEntry.js}
+      accounts-canary-url: ${ACCOUNTS_CANARY_URL:http://localhost:5174/assets/remoteEntry.js}
+      billing-stable-url: ${BILLING_STABLE_URL:http://localhost:5175/assets/remoteEntry.js}
+      billing-canary-url: ${BILLING_CANARY_URL:http://localhost:5175/assets/remoteEntry.js}
+      analytics-stable-url: ${ANALYTICS_STABLE_URL:http://localhost:5176/assets/remoteEntry.js}
+      analytics-canary-url: ${ANALYTICS_CANARY_URL:http://localhost:5176/assets/remoteEntry.js}

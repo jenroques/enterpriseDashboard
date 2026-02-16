@@ -1,6 +1,9 @@
 import http from 'node:http';
 
-const PORT = 8081;
+const PORT = Number(process.env.PORT ?? 8081);
+const ACCOUNTS_REMOTE_ENTRY_URL = process.env.ACCOUNTS_REMOTE_ENTRY_URL ?? 'http://localhost:5174/assets/remoteEntry.js';
+const BILLING_REMOTE_ENTRY_URL = process.env.BILLING_REMOTE_ENTRY_URL ?? 'http://localhost:5175/assets/remoteEntry.js';
+const ANALYTICS_REMOTE_ENTRY_URL = process.env.ANALYTICS_REMOTE_ENTRY_URL ?? 'http://localhost:5176/assets/remoteEntry.js';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -122,11 +125,11 @@ function getManifest() {
           scope: 'remote_accounts',
           module: './App',
           stable: {
-            url: 'http://localhost:5174/assets/remoteEntry.js',
+            url: ACCOUNTS_REMOTE_ENTRY_URL,
             version: '1.0.0-stable'
           },
           canary: {
-            url: 'http://localhost:5174/assets/remoteEntry.js',
+            url: ACCOUNTS_REMOTE_ENTRY_URL,
             version: '1.0.0-canary'
           },
           rollout: {
@@ -144,11 +147,11 @@ function getManifest() {
           scope: 'remote_billing',
           module: './App',
           stable: {
-            url: 'http://localhost:5175/assets/remoteEntry.js',
+            url: BILLING_REMOTE_ENTRY_URL,
             version: '1.0.0-stable'
           },
           canary: {
-            url: 'http://localhost:5175/assets/remoteEntry.js',
+            url: BILLING_REMOTE_ENTRY_URL,
             version: '1.0.0-canary'
           },
           rollout: {
@@ -161,16 +164,16 @@ function getManifest() {
         id: 'remote-analytics',
         title: 'Analytics',
         path: '/analytics',
-        requiredRoles: ['ADMIN'],
+        requiredRoles: ['USER', 'ADMIN'],
         remote: {
           scope: 'remote_analytics',
           module: './App',
           stable: {
-            url: 'http://localhost:5176/assets/remoteEntry.js',
+            url: ANALYTICS_REMOTE_ENTRY_URL,
             version: '1.0.0-stable'
           },
           canary: {
-            url: 'http://localhost:5176/assets/remoteEntry.js',
+            url: ANALYTICS_REMOTE_ENTRY_URL,
             version: '1.0.0-canary'
           },
           rollout: {

@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/registry")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:5173}")
 public class RegistryController {
 
         private static final Logger logger = LoggerFactory.getLogger(RegistryController.class);
@@ -60,7 +60,7 @@ public class RegistryController {
                 "remote-analytics",
                 "Analytics",
                 "/analytics",
-                List.of("ADMIN"),
+                                List.of("USER", "ADMIN"),
                 "remote_analytics",
                 "./App",
                 new RemoteVersion(remoteProperties.analyticsStableUrl(), "1.0.0-stable"),

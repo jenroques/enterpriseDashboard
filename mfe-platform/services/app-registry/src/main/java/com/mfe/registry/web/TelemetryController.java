@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:5173}")
 public class TelemetryController {
 
     private static final Logger logger = LoggerFactory.getLogger(TelemetryController.class);

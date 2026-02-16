@@ -76,7 +76,7 @@ export default function RemoteApp() {
   const total = chartData.reduce((sum, point) => sum + point.value, 0);
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: { xs: 1.5, sm: 2 }, border: 1, borderColor: 'divider' }}>
       <Stack spacing={2}>
         <PageHeader title="Analytics Dashboard" subtitle="Monitor activity trends with segment and time-range filters." />
 
@@ -115,32 +115,33 @@ export default function RemoteApp() {
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 2 }}>
           <Box>
-            <Paper variant="outlined" sx={{ p: 2 }}>
+            <Paper variant="outlined" sx={{ p: 2, borderColor: 'divider' }}>
               <Typography variant="subtitle1" sx={{ mb: 1.5 }}>
                 Active Usage Trend
               </Typography>
-              <Stack direction="row" alignItems="flex-end" spacing={1.5} sx={{ height: 180 }}>
+              <Stack direction="row" alignItems="flex-end" spacing={1.5} sx={{ height: 188, px: 1, pb: 0.5 }}>
                 {chartData.map((point) => (
                   <Stack key={point.label} alignItems="center" spacing={0.5} sx={{ flex: 1 }}>
-                    <Typography variant="caption">{point.value}</Typography>
+                    <Typography variant="caption" color="text.secondary">{point.value}</Typography>
                     <Paper
                       elevation={0}
                       sx={{
                         width: '100%',
                         height: `${Math.max((point.value / maxValue) * 130, 8)}px`,
-                        bgcolor: 'primary.main'
+                        bgcolor: 'primary.main',
+                        borderRadius: 1
                       }}
                     />
-                    <Typography variant="caption">{point.label}</Typography>
+                    <Typography variant="caption" color="text.secondary">{point.label}</Typography>
                   </Stack>
                 ))}
               </Stack>
             </Paper>
           </Box>
           <Box>
-            <Paper variant="outlined" sx={{ p: 2 }}>
+            <Paper variant="outlined" sx={{ p: 2, borderColor: 'divider', minHeight: 188 }}>
               <Typography variant="subtitle1">KPI Snapshot</Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>Total Activity: {total}</Typography>
+              <Typography variant="body2" sx={{ mt: 1.5 }}>Total Activity: {total}</Typography>
               <Typography variant="body2">Average/Point: {Math.round(total / chartData.length)}</Typography>
               <Typography variant="body2">Segment: {segment}</Typography>
               <Typography variant="body2">Range: {timeRange}</Typography>

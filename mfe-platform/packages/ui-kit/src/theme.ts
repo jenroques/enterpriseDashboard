@@ -8,18 +8,29 @@ export const appTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#0f62fe'
+      main: '#2f5d46',
+      light: '#4f7a62',
+      dark: '#214333',
+      contrastText: '#f7f8f6'
     },
     secondary: {
-      main: '#6f2dbd'
+      main: '#b45f3b',
+      light: '#cf7d57',
+      dark: '#8f4526',
+      contrastText: '#ffffff'
     },
     background: {
-      default: '#f6f8fb',
-      paper: '#ffffff'
+      default: '#f2f0ea',
+      paper: '#fcfbf8'
     },
+    divider: '#d9d4c9',
     text: {
-      primary: '#0f172a',
-      secondary: '#475569'
+      primary: '#2f2b24',
+      secondary: '#5f584c'
+    },
+    action: {
+      hover: '#ebe7dd',
+      selected: '#e3ddd0'
     }
   },
   typography: {

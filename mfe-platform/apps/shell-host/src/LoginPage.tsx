@@ -38,26 +38,26 @@ export function LoginPage({ onAuthenticated }: LoginPageProps) {
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center', p: 2 }}>
-      <Paper sx={{ p: 3, width: '100%', maxWidth: 420 }}>
+      <Paper sx={{ p: { xs: 2.5, sm: 3 }, width: '100%', maxWidth: 460, border: 1, borderColor: 'divider' }}>
         <PageHeader title="Mock Login" subtitle="Authenticate against app-registry local JWT issuer." />
-        <Box sx={{ my: 2 }} />
-        <Typography variant="body2" sx={{ mb: 2 }}>
+        <Typography variant="body2" sx={{ mt: 1.5, mb: 2.5, color: 'text.secondary' }}>
           Use username `admin` for ADMIN+USER roles, or any other username for USER role.
         </Typography>
-        <Alert severity="info" sx={{ mb: 2 }}>
+        <Alert severity="info" sx={{ mb: 2.5, border: 1, borderColor: 'divider' }}>
           Access token is kept in memory only. For production, use short-lived access tokens with refresh via HttpOnly secure cookie.
         </Alert>
-        {error ? <ErrorState message={error} /> : null}
+        {error ? <Box sx={{ mb: 2 }}><ErrorState message={error} /></Box> : null}
         <Stack component="form" spacing={2} onSubmit={handleSubmit}>
-          <TextField label="Username" value={username} onChange={(event) => setUsername(event.target.value)} required />
+          <TextField label="Username" value={username} onChange={(event) => setUsername(event.target.value)} required size="small" />
           <TextField
             label="Password"
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
+            size="small"
           />
-          <Button type="submit" variant="contained" disabled={loading}>
+          <Button type="submit" variant="contained" disabled={loading} sx={{ mt: 1, py: 1 }}>
             {loading ? 'Signing in...' : 'Sign in'}
           </Button>
         </Stack>

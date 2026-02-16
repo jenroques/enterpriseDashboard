@@ -1,0 +1,23 @@
+{
+  "name": "mfe-remote-analytics",
+  "description": "Analytics remote for mfe-platform",
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "APP_BASE": {
+      "value": "apps/remote-analytics"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

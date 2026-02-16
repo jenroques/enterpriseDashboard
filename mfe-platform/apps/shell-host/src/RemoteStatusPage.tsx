@@ -30,15 +30,15 @@ export function RemoteStatusPage() {
   const values = Object.values(statuses);
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: { xs: 1.5, sm: 2 }, border: 1, borderColor: 'divider' }}>
       <PageHeader title="Remote Status" subtitle="Inspect remote loading state, version alignment, and errors." />
       <Typography sx={{ mb: 2 }} />
 
       {values.length === 0 ? <EmptyState title="No remotes configured" description="Registry did not return any remotes." /> : null}
 
-      <TableContainer>
+      <TableContainer sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5 }}>
         <Table size="small">
-          <TableHead>
+          <TableHead sx={{ bgcolor: 'action.hover' }}>
             <TableRow>
               <TableCell>Remote</TableCell>
               <TableCell>Scope</TableCell>
@@ -50,7 +50,7 @@ export function RemoteStatusPage() {
           </TableHead>
           <TableBody>
             {values.map((item) => (
-              <TableRow key={item.scope}>
+              <TableRow key={item.scope} hover>
                 <TableCell>{item.title}</TableCell>
                 <TableCell>{item.scope}</TableCell>
                 <TableCell>{item.version}</TableCell>

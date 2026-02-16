@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:5173}")
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);

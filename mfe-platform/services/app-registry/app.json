@@ -1,0 +1,55 @@
+{
+  "name": "mfe-app-registry",
+  "description": "Spring Boot app-registry for mfe-platform",
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/java"
+    }
+  ],
+  "env": {
+    "APP_BASE": {
+      "value": "services/app-registry"
+    },
+    "APP_JWT_SECRET": {
+      "description": "JWT signing secret for access tokens",
+      "required": true
+    },
+    "APP_CORS_ALLOWED_ORIGINS": {
+      "description": "Allowed CORS origins, for example https://mfe-shell-prod.herokuapp.com",
+      "required": true
+    },
+    "ACCOUNTS_STABLE_URL": {
+      "description": "Remote accounts stable remoteEntry URL",
+      "required": true
+    },
+    "ACCOUNTS_CANARY_URL": {
+      "description": "Remote accounts canary remoteEntry URL",
+      "required": true
+    },
+    "BILLING_STABLE_URL": {
+      "description": "Remote billing stable remoteEntry URL",
+      "required": true
+    },
+    "BILLING_CANARY_URL": {
+      "description": "Remote billing canary remoteEntry URL",
+      "required": true
+    },
+    "ANALYTICS_STABLE_URL": {
+      "description": "Remote analytics stable remoteEntry URL",
+      "required": true
+    },
+    "ANALYTICS_CANARY_URL": {
+      "description": "Remote analytics canary remoteEntry URL",
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

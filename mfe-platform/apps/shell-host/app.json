@@ -1,0 +1,27 @@
+{
+  "name": "mfe-shell-host",
+  "description": "Shell host for mfe-platform",
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "APP_BASE": {
+      "value": "apps/shell-host"
+    },
+    "VITE_API_BASE_URL": {
+      "description": "Public API base URL used at frontend build time, for example https://mfe-registry-prod.herokuapp.com/api",
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

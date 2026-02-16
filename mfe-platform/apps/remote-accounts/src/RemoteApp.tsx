@@ -61,7 +61,7 @@ export default function RemoteApp() {
   const selected = filteredAccounts.find((account) => account.id === selectedAccountId) ?? filteredAccounts[0] ?? null;
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: { xs: 1.5, sm: 2 }, border: 1, borderColor: 'divider' }}>
       <Stack spacing={2}>
         <PageHeader title="Accounts Overview" subtitle="Search customer accounts and inspect ownership details." />
         <TextField
@@ -73,12 +73,22 @@ export default function RemoteApp() {
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 40%) 1fr' }, gap: 2 }}>
           <Box>
-            <Paper variant="outlined" sx={{ maxHeight: 300, overflow: 'auto' }}>
+            <Paper variant="outlined" sx={{ maxHeight: 340, overflow: 'auto', borderColor: 'divider' }}>
               <List disablePadding>
                 {filteredAccounts.map((account) => (
                   <ListItemButton
                     key={account.id}
                     selected={selected?.id === account.id}
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      '&.Mui-selected': {
+                        bgcolor: 'action.selected',
+                        borderLeft: 3,
+                        borderColor: 'primary.main',
+                        pl: 1.625
+                      }
+                    }}
                     onClick={() => handleAccountClick(account.id, account.name)}
                   >
                     <ListItemText primary={account.name} secondary={`${account.id} • ${account.owner}`} />
@@ -89,7 +99,7 @@ export default function RemoteApp() {
           </Box>
 
           <Box>
-            <Paper variant="outlined" sx={{ p: 2, minHeight: 300 }}>
+            <Paper variant="outlined" sx={{ p: 2, minHeight: 340, borderColor: 'divider' }}>
               {selected ? (
                 <Stack spacing={1.5}>
                   <Typography variant="h6">{selected.name}</Typography>

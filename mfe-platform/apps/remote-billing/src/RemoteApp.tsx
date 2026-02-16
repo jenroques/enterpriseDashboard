@@ -76,7 +76,7 @@ export default function RemoteApp() {
   const selected = filteredInvoices.find((invoice) => invoice.id === selectedInvoiceId) ?? filteredInvoices[0] ?? null;
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: { xs: 1.5, sm: 2 }, border: 1, borderColor: 'divider' }}>
       <Stack spacing={2}>
         <PageHeader title="Billing Operations" subtitle="Track invoice status and drill into payment details." />
         <FormControl size="small" sx={{ maxWidth: 220 }}>
@@ -96,9 +96,9 @@ export default function RemoteApp() {
 
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 2 }}>
           <Box>
-            <Paper variant="outlined">
+            <Paper variant="outlined" sx={{ borderColor: 'divider' }}>
               <Table size="small">
-                <TableHead>
+                <TableHead sx={{ bgcolor: 'action.hover' }}>
                   <TableRow>
                     <TableCell>Invoice</TableCell>
                     <TableCell>Customer</TableCell>
@@ -113,7 +113,12 @@ export default function RemoteApp() {
                       hover
                       selected={selected?.id === invoice.id}
                       onClick={() => onInvoiceSelect(invoice.id)}
-                      sx={{ cursor: 'pointer' }}
+                      sx={{
+                        cursor: 'pointer',
+                        '&.Mui-selected': {
+                          bgcolor: 'action.selected'
+                        }
+                      }}
                     >
                       <TableCell>{invoice.id}</TableCell>
                       <TableCell>{invoice.customer}</TableCell>
@@ -129,7 +134,7 @@ export default function RemoteApp() {
           </Box>
 
           <Box>
-            <Paper variant="outlined" sx={{ p: 2, minHeight: 220 }}>
+            <Paper variant="outlined" sx={{ p: 2, minHeight: 220, borderColor: 'divider' }}>
               {selected ? (
                 <Stack spacing={1}>
                   <Typography variant="h6">Invoice Details</Typography>

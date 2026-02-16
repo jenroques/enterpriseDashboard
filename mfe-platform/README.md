@@ -44,6 +44,7 @@ mfe-platform/
 - Architecture decisions: [docs/architecture-decisions.md](docs/architecture-decisions.md)
 - Security considerations: [docs/security-considerations.md](docs/security-considerations.md)
 - Deployment and versioning strategy: [docs/deployment-versioning.md](docs/deployment-versioning.md)
+- Heroku deployment guide: [docs/heroku-deployment.md](docs/heroku-deployment.md)
 
 ## Module Federation Contract
 

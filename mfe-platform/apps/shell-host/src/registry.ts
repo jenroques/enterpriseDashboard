@@ -3,11 +3,12 @@ import { logStructured } from './logger';
 import { parseRegistryResponse } from './manifest-schema';
 import type { CanaryFlag, ClientContext, LoginResponse, RegistryResponse, TelemetryEventInput, TelemetryRecord } from './types';
 
-const REGISTRY_URL = 'http://localhost:8081/api/registry';
-const AUTH_URL = 'http://localhost:8081/api/auth/login';
-const CANARY_FLAGS_URL = 'http://localhost:8081/api/registry/admin/canary-flags';
-const TELEMETRY_URL = 'http://localhost:8081/api/telemetry';
-const ADMIN_TELEMETRY_URL = 'http://localhost:8081/api/admin/telemetry';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/api').replace(/\/+$/, '');
+const REGISTRY_URL = `${API_BASE_URL}/registry`;
+const AUTH_URL = `${API_BASE_URL}/auth/login`;
+const CANARY_FLAGS_URL = `${API_BASE_URL}/registry/admin/canary-flags`;
+const TELEMETRY_URL = `${API_BASE_URL}/telemetry`;
+const ADMIN_TELEMETRY_URL = `${API_BASE_URL}/admin/telemetry`;
 const API_REQUEST_TIMEOUT_MS = 12_000;
 
 let clientContext: ClientContext = {
