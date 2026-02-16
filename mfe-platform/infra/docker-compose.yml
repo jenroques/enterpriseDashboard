@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  app-registry:
+    build:
+      context: ../services/app-registry
+      dockerfile: Dockerfile
+    container_name: mfe-app-registry
+    ports:
+      - "8081:8081"

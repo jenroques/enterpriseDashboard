@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: app-registry
+
+app:
+  jwt:
+    secret: "local-dev-super-secret-signing-key-please-change"
+    expiration-minutes: 60
+  registry:
+    remotes:
+      accounts-stable-url: "http://localhost:5174/assets/remoteEntry.js"
+      accounts-canary-url: "http://localhost:5174/assets/remoteEntry.js"
+      billing-stable-url: "http://localhost:5175/assets/remoteEntry.js"
+      billing-canary-url: "http://localhost:5175/assets/remoteEntry.js"
+      analytics-stable-url: "http://localhost:5176/assets/remoteEntry.js"
+      analytics-canary-url: "http://localhost:5176/assets/remoteEntry.js"

@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.card {
+  border-radius: 10px;
+  padding: 1rem;
+  background: #111827;
+  color: #f9fafb;
+  border: 1px solid #374151;
+}
+
+h2 {
+  margin-top: 0;
+}
