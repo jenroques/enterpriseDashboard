@@ -20,7 +20,7 @@
     "test:e2e": "npm run test:e2e -w @mfe/shell-host",
     "build:frontend": "npm run build -w @mfe/shell-host",
     "copy:frontend": "node ./infra/scripts/copy-frontend-to-registry.mjs",
-    "build:backend": "mvn -f ./services/app-registry/pom.xml -DskipTests package",
+    "build:backend": "sh ./services/app-registry/mvnw -f ./services/app-registry/pom.xml -DskipTests package",
     "heroku-postbuild": "npm run build:frontend && npm run copy:frontend && npm run build:backend",
     "start": "java -Dserver.port=$PORT -jar ./services/app-registry/target/app-registry-1.0.0.jar",
     "build": "npm run build --workspaces --if-present",

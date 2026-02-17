@@ -21,12 +21,12 @@ heroku create mfe-enterprise-dashboard
 
 ## 3) Configure buildpacks
 
-Use Node + Java buildpacks at the monorepo root:
+Use Java + Node buildpacks at the monorepo root (Java first so `java` is available when Node runs `heroku-postbuild`):
 
 ```bash
 heroku buildpacks:clear -a mfe-enterprise-dashboard
-heroku buildpacks:add -i 1 heroku/nodejs -a mfe-enterprise-dashboard
-heroku buildpacks:add -i 2 heroku/java -a mfe-enterprise-dashboard
+heroku buildpacks:add -i 1 heroku/java -a mfe-enterprise-dashboard
+heroku buildpacks:add -i 2 heroku/nodejs -a mfe-enterprise-dashboard
 ```
 
 ## 4) Set required config vars
@@ -61,6 +61,8 @@ Heroku build pipeline at root uses:
 
 - `heroku-postbuild` -> `build:frontend` -> `copy:frontend` -> `build:backend`
 - `Procfile` web process -> starts Spring Boot jar only
+
+`build:backend` uses Maven Wrapper at `services/app-registry/mvnw`, so it does not require `mvn` on PATH.
 
 ## 6) Validate
 
