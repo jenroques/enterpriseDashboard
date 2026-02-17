@@ -3,7 +3,9 @@ import { logStructured } from './logger';
 import { parseRegistryResponse } from './manifest-schema';
 import type { CanaryFlag, ClientContext, LoginResponse, RegistryResponse, TelemetryEventInput, TelemetryRecord } from './types';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/api').replace(/\/+$/, '');
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.PROD ? '/api' : 'http://localhost:8081/api')
+).replace(/\/+$/, '');
 const REGISTRY_URL = `${API_BASE_URL}/registry`;
 const AUTH_URL = `${API_BASE_URL}/auth/login`;
 const CANARY_FLAGS_URL = `${API_BASE_URL}/registry/admin/canary-flags`;

@@ -1,10 +1,11 @@
 # Heroku Deployment Guide
 
-This monorepo is deployed to Heroku as **multiple apps**:
+This monorepo is deployed to Heroku as **one standalone app** (single dyno, single URL):
 
-- 1 x registry API (`services/app-registry`)
-- 1 x shell host (`apps/shell-host`)
-- 3 x remotes (`apps/remote-accounts`, `apps/remote-billing`, `apps/remote-analytics`)
+- Spring Boot (`services/app-registry`) is the only web process
+- Shell frontend (`apps/shell-host`) is built at deploy time
+- Frontend build output is copied into Spring static resources
+- Spring serves both API (`/api/*`) and SPA (`/`, `/accounts`, etc.)
 
 ## 1) Prerequisites
 
@@ -12,126 +13,63 @@ This monorepo is deployed to Heroku as **multiple apps**:
 - Git repo connected to Heroku
 - Heroku stack supports Node + Java buildpacks (default Heroku-22 works)
 
-## 2) Create Heroku apps
-
-Example names (replace as needed):
-
-- `mfe-registry-prod`
-- `mfe-shell-prod`
-- `mfe-accounts-prod`
-- `mfe-billing-prod`
-- `mfe-analytics-prod`
-
-## Optional: app.json manifests
-
-Each deployable sub-app now includes an `app.json` manifest:
-
-- `apps/shell-host/app.json`
-- `apps/remote-accounts/app.json`
-- `apps/remote-billing/app.json`
-- `apps/remote-analytics/app.json`
-- `services/app-registry/app.json`
-
-These manifests define expected buildpacks and env vars for each app, and can be used as a checklist when configuring Heroku apps.
-
-## 3) Configure monorepo subdirectory builds
-
-For each app, configure the subdir buildpack first, then language buildpack.
-
-### Shell and remotes (Node buildpack)
+## 2) Create one Heroku app
 
 ```bash
-heroku buildpacks:clear -a mfe-shell-prod
-heroku buildpacks:add -i 1 https://github.com/timanovsky/subdir-heroku-buildpack -a mfe-shell-prod
-heroku buildpacks:add -i 2 heroku/nodejs -a mfe-shell-prod
-heroku config:set APP_BASE=apps/shell-host -a mfe-shell-prod
+heroku create mfe-enterprise-dashboard
 ```
 
-Repeat for each remote with matching `APP_BASE`:
+## 3) Configure buildpacks
 
-- accounts: `APP_BASE=apps/remote-accounts`
-- billing: `APP_BASE=apps/remote-billing`
-- analytics: `APP_BASE=apps/remote-analytics`
-
-### Registry (Java buildpack)
+Use Node + Java buildpacks at the monorepo root:
 
 ```bash
-heroku buildpacks:clear -a mfe-registry-prod
-heroku buildpacks:add -i 1 https://github.com/timanovsky/subdir-heroku-buildpack -a mfe-registry-prod
-heroku buildpacks:add -i 2 heroku/java -a mfe-registry-prod
-heroku config:set APP_BASE=services/app-registry -a mfe-registry-prod
+heroku buildpacks:clear -a mfe-enterprise-dashboard
+heroku buildpacks:add -i 1 heroku/nodejs -a mfe-enterprise-dashboard
+heroku buildpacks:add -i 2 heroku/java -a mfe-enterprise-dashboard
 ```
 
 ## 4) Set required config vars
 
-## Registry app config (`mfe-registry-prod`)
+Set at least:
 
 ```bash
-heroku config:set APP_JWT_SECRET="replace-with-strong-secret" -a mfe-registry-prod
-heroku config:set APP_CORS_ALLOWED_ORIGINS="https://mfe-shell-prod.herokuapp.com" -a mfe-registry-prod
-
-heroku config:set ACCOUNTS_STABLE_URL="https://mfe-accounts-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
-heroku config:set ACCOUNTS_CANARY_URL="https://mfe-accounts-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
-
-heroku config:set BILLING_STABLE_URL="https://mfe-billing-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
-heroku config:set BILLING_CANARY_URL="https://mfe-billing-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
-
-heroku config:set ANALYTICS_STABLE_URL="https://mfe-analytics-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
-heroku config:set ANALYTICS_CANARY_URL="https://mfe-analytics-prod.herokuapp.com/assets/remoteEntry.js" -a mfe-registry-prod
+heroku config:set APP_JWT_SECRET="replace-with-strong-secret" -a mfe-enterprise-dashboard
+heroku config:set APP_CORS_ALLOWED_ORIGINS="https://mfe-enterprise-dashboard.herokuapp.com" -a mfe-enterprise-dashboard
 ```
 
-### Shell app config (`mfe-shell-prod`)
+For true single-app mode, remote URLs should be same-origin paths (or disabled if not used):
 
 ```bash
-heroku config:set VITE_API_BASE_URL="https://mfe-registry-prod.herokuapp.com/api" -a mfe-shell-prod
+heroku config:set ACCOUNTS_STABLE_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
+heroku config:set ACCOUNTS_CANARY_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
+heroku config:set BILLING_STABLE_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
+heroku config:set BILLING_CANARY_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
+heroku config:set ANALYTICS_STABLE_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
+heroku config:set ANALYTICS_CANARY_URL="https://mfe-enterprise-dashboard.herokuapp.com/assets/remoteEntry.js" -a mfe-enterprise-dashboard
 ```
-
-Remotes do not require extra config vars for default behavior.
-
-### Optional: one-command PowerShell helper
-
-Instead of setting vars manually, use:
-
-```powershell
-./infra/scripts/set-heroku-config.ps1 `
-	-ShellApp mfe-shell-prod `
-	-RegistryApp mfe-registry-prod `
-	-ShellOrigin https://mfe-shell-prod.herokuapp.com `
-	-RegistryOrigin https://mfe-registry-prod.herokuapp.com `
-	-AccountsOrigin https://mfe-accounts-prod.herokuapp.com `
-	-BillingOrigin https://mfe-billing-prod.herokuapp.com `
-	-AnalyticsOrigin https://mfe-analytics-prod.herokuapp.com
-```
-
-Optional: pass your own JWT secret with `-JwtSecret "..."`.
 
 ## 5) Deploy
 
-Push the same git branch to each app:
+Push main branch to one app:
 
 ```bash
 git push heroku main
 ```
 
-If using multiple Heroku remotes:
+Heroku build pipeline at root uses:
 
-```bash
-git push heroku-shell main
-git push heroku-accounts main
-git push heroku-billing main
-git push heroku-analytics main
-git push heroku-registry main
-```
+- `heroku-postbuild` -> `build:frontend` -> `copy:frontend` -> `build:backend`
+- `Procfile` web process -> starts Spring Boot jar only
 
 ## 6) Validate
 
-- Open shell app URL.
+- Open app URL.
 - Login (`admin` gets `ADMIN + USER`, other usernames get `USER`).
-- Confirm left nav includes Accounts, Billing, Analytics.
-- Open `/debug/remotes` in shell and verify remotes load from Heroku URLs.
+- Confirm `/api/registry` is served by backend.
+- Confirm SPA routes (for example `/accounts` or `/debug/remotes`) refresh without 404.
 
 ## Notes
 
-- Frontend apps use `vite preview` and bind to `0.0.0.0:$PORT` for Heroku runtime.
-- Registry reads Heroku `PORT` automatically.
-- If config vars change, redeploy the shell so `VITE_API_BASE_URL` is baked into the frontend build.
+- Production runtime does not use Vite dev server.
+- Spring Boot serves frontend assets from `services/app-registry/src/main/resources/static`.
