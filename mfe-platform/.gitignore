@@ -10,4 +10,4 @@ apps/**/vite.config.d.ts
 
 # Java / Spring
 services/app-registry/target/
-services/app-registry/.mvn/
+services/app-registry/.mvn/wrapper/maven-wrapper.jar
