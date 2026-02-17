@@ -22,7 +22,7 @@
     "copy:frontend": "node ./infra/scripts/copy-frontend-to-registry.mjs",
     "build:backend": "sh ./services/app-registry/mvnw -f ./services/app-registry/pom.xml -DskipTests package",
     "heroku-postbuild": "npm run build:frontend && npm run copy:frontend && npm run build:backend",
-    "start": "java -Dserver.port=$PORT -jar ./services/app-registry/target/app-registry-1.0.0.jar",
+    "start": "sh ./infra/scripts/start-heroku-web.sh",
     "build": "npm run build --workspaces --if-present",
     "preview": "npm run preview -w @mfe/shell-host"
   },
