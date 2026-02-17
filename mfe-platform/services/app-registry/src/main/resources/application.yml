@@ -13,9 +13,9 @@ app:
     expiration-minutes: 60
   registry:
     remotes:
-      accounts-stable-url: ${ACCOUNTS_STABLE_URL:http://localhost:5174/assets/remoteEntry.js}
-      accounts-canary-url: ${ACCOUNTS_CANARY_URL:http://localhost:5174/assets/remoteEntry.js}
-      billing-stable-url: ${BILLING_STABLE_URL:http://localhost:5175/assets/remoteEntry.js}
-      billing-canary-url: ${BILLING_CANARY_URL:http://localhost:5175/assets/remoteEntry.js}
-      analytics-stable-url: ${ANALYTICS_STABLE_URL:http://localhost:5176/assets/remoteEntry.js}
-      analytics-canary-url: ${ANALYTICS_CANARY_URL:http://localhost:5176/assets/remoteEntry.js}
+      accounts-stable-url: ${ACCOUNTS_STABLE_URL:/remotes/remote-accounts/assets/remoteEntry.js}
+      accounts-canary-url: ${ACCOUNTS_CANARY_URL:/remotes/remote-accounts/assets/remoteEntry.js}
+      billing-stable-url: ${BILLING_STABLE_URL:/remotes/remote-billing/assets/remoteEntry.js}
+      billing-canary-url: ${BILLING_CANARY_URL:/remotes/remote-billing/assets/remoteEntry.js}
+      analytics-stable-url: ${ANALYTICS_STABLE_URL:/remotes/remote-analytics/assets/remoteEntry.js}
+      analytics-canary-url: ${ANALYTICS_CANARY_URL:/remotes/remote-analytics/assets/remoteEntry.js}

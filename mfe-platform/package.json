@@ -19,9 +19,11 @@
     "test:contract": "npm run test:contract -w @mfe/shell-host",
     "test:e2e": "npm run test:e2e -w @mfe/shell-host",
     "build:frontend": "npm run build -w @mfe/shell-host",
+    "build:remotes": "npm run build -w @mfe/remote-accounts && npm run build -w @mfe/remote-billing && npm run build -w @mfe/remote-analytics",
     "copy:frontend": "node ./infra/scripts/copy-frontend-to-registry.mjs",
+    "copy:remotes": "node ./infra/scripts/copy-remotes-to-registry.mjs",
     "build:backend": "sh ./services/app-registry/mvnw -f ./services/app-registry/pom.xml -DskipTests package",
-    "heroku-postbuild": "npm run build:frontend && npm run copy:frontend && npm run build:backend",
+    "heroku-postbuild": "npm run build:frontend && npm run build:remotes && npm run copy:frontend && npm run copy:remotes && npm run build:backend",
     "start": "sh ./infra/scripts/start-heroku-web.sh",
     "build": "npm run build --workspaces --if-present",
     "preview": "npm run preview -w @mfe/shell-host"

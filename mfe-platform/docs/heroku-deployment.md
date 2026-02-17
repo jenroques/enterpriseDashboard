@@ -5,6 +5,7 @@ This monorepo is deployed to Heroku as **one standalone app** (single dyno, sing
 - Spring Boot (`services/app-registry`) is the only web process
 - Shell frontend (`apps/shell-host`) is built at deploy time
 - Frontend build output is copied into Spring static resources
+- Remote build outputs are copied into Spring static resources under `/remotes/*`
 - Spring serves both API (`/api/*`) and SPA (`/`, `/accounts`, etc.)
 
 ## 1) Prerequisites
@@ -61,7 +62,7 @@ git push heroku main
 
 Heroku build pipeline at root uses:
 
-- `heroku-postbuild` -> `build:frontend` -> `copy:frontend` -> `build:backend`
+- `heroku-postbuild` -> `build:frontend` -> `build:remotes` -> `copy:frontend` -> `copy:remotes` -> `build:backend`
 - `Procfile` web process -> starts Spring Boot jar only
 
 `build:backend` uses Maven Wrapper at `services/app-registry/mvnw`, so it does not require `mvn` on PATH.
@@ -77,3 +78,4 @@ Heroku build pipeline at root uses:
 
 - Production runtime does not use Vite dev server.
 - Spring Boot serves frontend assets from `services/app-registry/src/main/resources/static`.
+- Registry default remote URLs are same-origin (`/remotes/.../assets/remoteEntry.js`) for single-app deployment.
