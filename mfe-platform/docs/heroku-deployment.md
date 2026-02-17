@@ -29,6 +29,8 @@ heroku buildpacks:add -i 1 heroku/java -a mfe-enterprise-dashboard
 heroku buildpacks:add -i 2 heroku/nodejs -a mfe-enterprise-dashboard
 ```
 
+This repo includes a root `pom.xml` aggregator so the Java buildpack can detect the app correctly.
+
 ## 4) Set required config vars
 
 Set at least:
